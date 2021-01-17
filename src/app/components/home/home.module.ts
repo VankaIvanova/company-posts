@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from 'src/app/store/users';
 import { postsReducer } from 'src/app/store/posts';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { postsReducer } from 'src/app/store/posts';
     NgxPaginationModule,
     StoreModule.forFeature('users', reducer),
     StoreModule.forFeature('posts', postsReducer),
+    Ng2SearchPipeModule
   ],
   declarations: [HomePage]
 })

@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
     public formBuilder: FormBuilder
   ) {
       this.createPost = formBuilder.group({
+        username: '',
         title: '',
         body: ''
       });
@@ -46,12 +47,17 @@ export class HomePage implements OnInit {
     this._store.pipe(select(fromUsers.allUsers)).subscribe(res => {
       this.users = res.data;
     });
-    
+
     this._storePosts.pipe(select(fromPosts.allPosts)).subscribe(res => {      
-      this.posts = res.data;  
+      this.posts = this.mergeById(res.data, this.users);
     });
   }
 
+  public mergeById = (array1, array2) =>
+    array1.map(post => ({
+      ...array2.find((user) => (user.id === post.userId) && user),
+      ...post
+  }));
   
   public onCreatePost() {    
     this._storePosts.dispatch(new fromPosts.PostPosts(this.createPost.value));
@@ -61,5 +67,12 @@ export class HomePage implements OnInit {
   public onCreateUser() {    
     this._store.dispatch(new fromUsers.PostUser(this.createUser.value));
     this._store.pipe(select(fromUsers.allUsers)).subscribe();
+  }
+
+  public sortByName(array, key) {
+    return array.sort(function (a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 0 : 1));
+    });
   }
 }

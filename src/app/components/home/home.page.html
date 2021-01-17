@@ -1,15 +1,4 @@
 <ion-content fullscreen>
-  <!-- <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="medium">Posts</ion-title>
-    </ion-toolbar>
-    <ion-fab vertical="top" horizontal="end">
-      <ion-fab-button>
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  </ion-header> -->
-
   <div class="ion-padding-start ion-padding-end">
 
     <ion-toolbar>
@@ -23,6 +12,7 @@
       </ion-segment>
     </ion-toolbar>
     
+    <!-- USERS -->
     <div *ngIf="segmentModel === 'users'">
       <form [formGroup]="createUser" (ngSubmit)="onCreateUser()">
         <ion-row>
@@ -44,7 +34,9 @@
         </ion-row>
       </form>
 
-      <ion-card *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
+      <ion-searchbar placeholder="Search..." [(ngModel)]="filterUsers" animated="true"></ion-searchbar>
+
+      <ion-card *ngFor="let user of users | filter:filterUsers | paginate: { itemsPerPage: 5, currentPage: p }">
         <ion-item>
           <ion-label>
             <h2>{{user.username}}</h2>
@@ -62,6 +54,10 @@
       <form [formGroup]="createPost" (ngSubmit)="onCreatePost()">
         <ion-row>
           <ion-item>
+            <ion-label>User</ion-label>
+            <ion-input formControlName="username"  type="text"></ion-input>
+          </ion-item>
+          <ion-item>
             <ion-label>Title</ion-label>
             <ion-input formControlName="title"  type="text"></ion-input>
           </ion-item>
@@ -75,12 +71,15 @@
         </ion-row>
       </form>
 
+      <ion-button (click)="sortByName(posts, 'username')">Sort Posts</ion-button>
 
-      <ion-card *ngFor="let post of posts | paginate: { itemsPerPage: 5, currentPage: p }">
+      <ion-searchbar placeholder="Search..." [(ngModel)]="filterPosts" animated="true"></ion-searchbar>
+
+      <ion-card *ngFor="let post of posts | filter:filterPosts | paginate: { itemsPerPage: 5, currentPage: p }">
         <ion-card-header>
+          <ion-card-subtitle><strong>Name: </strong> {{post.username}}</ion-card-subtitle>
           <ion-card-title>{{post.title}}</ion-card-title>
         </ion-card-header>
-        <ion-card-subtitle>{{setUserName()}}</ion-card-subtitle>
         <ion-card-content>
         {{post.body}}
         </ion-card-content>
