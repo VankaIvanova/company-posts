@@ -1,0 +1,92 @@
+<ion-content fullscreen>
+  <!-- <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="medium">Posts</ion-title>
+    </ion-toolbar>
+    <ion-fab vertical="top" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-header> -->
+
+  <div class="ion-padding-start ion-padding-end">
+
+    <ion-toolbar>
+      <ion-segment [(ngModel)]="segmentModel" value="posts">
+        <ion-segment-button value="posts">
+          Posts
+        </ion-segment-button>
+        <ion-segment-button value="users">
+          Users
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+    
+    <div *ngIf="segmentModel === 'users'">
+      <form [formGroup]="createUser" (ngSubmit)="onCreateUser()">
+        <ion-row>
+          <ion-item>
+            <ion-label>Username</ion-label>
+            <ion-input formControlName="username"  type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Name</ion-label>
+            <ion-input formControlName="name"  type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Email</ion-label>
+            <ion-input formControlName="email"  type="text"></ion-input>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-button type="submit">Create User</ion-button>
+        </ion-row>
+      </form>
+
+      <ion-card *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
+        <ion-item>
+          <ion-label>
+            <h2>{{user.username}}</h2>
+            <h3>{{user.name}}</h3>
+            <p>{{user.email}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card>
+
+      <pagination-controls previousLabel="" nextLabel="" (pageChange)="p = $event"></pagination-controls>
+    </div>
+
+    <!-- POSTS -->
+    <div *ngIf="segmentModel === 'posts'">
+      <form [formGroup]="createPost" (ngSubmit)="onCreatePost()">
+        <ion-row>
+          <ion-item>
+            <ion-label>Title</ion-label>
+            <ion-input formControlName="title"  type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Body</ion-label>
+            <ion-input formControlName="body"  type="text"></ion-input>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-button type="submit">Create Post</ion-button>
+        </ion-row>
+      </form>
+
+
+      <ion-card *ngFor="let post of posts | paginate: { itemsPerPage: 5, currentPage: p }">
+        <ion-card-header>
+          <ion-card-title>{{post.title}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-subtitle>{{setUserName()}}</ion-card-subtitle>
+        <ion-card-content>
+        {{post.body}}
+        </ion-card-content>
+      </ion-card>
+
+      <pagination-controls previousLabel="" nextLabel="" (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</ion-content>
